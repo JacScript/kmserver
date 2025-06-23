@@ -12,9 +12,13 @@ const cookieParser = require("cookie-parser");
 const { notFound, errorHandler } = require("./middlewares/globalErrorHandler");
 const authRoutes = require("./routes/auth.js");
 const testimonialRoutes = require("./routes/testimonial.js");
+const requestRoutes = require("./routes/request.js");
+const homeRoutes = require("./routes/home.js");
+const cors = require("cors")
 
 // Create Express app
 const application = express();
+application.use(express.urlencoded({ extended: true }));
 application.use(cookieParser()); // ✅ Enables reading cookies
 
 // Environment config
@@ -23,10 +27,18 @@ const MONGOURL = process.env.MONGOURL;
 
 // Parse JSON requests
 application.use(express.json());
+// Middleware to parse URL-encoded data (optional)
+application.use(cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    credentials: true
+})
+); 
 
 // Routes
 application.use("/auth", authRoutes);
 application.use("/testimonial", testimonialRoutes);
+application.use("/request", requestRoutes);
+application.use("/home", homeRoutes);
 
 // Middleware to handle 404 errors and global errors
 application.use(notFound);

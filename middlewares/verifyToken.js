@@ -5,7 +5,7 @@ const User = require("../models/User");
 // Middleware to verify access token from cookies
 const verifyToken = async (request, response, next) => {
   const  {accessToken } = await request.cookies;
-    console.log(accessToken);
+    // console.log(accessToken);
 
 
   try {
@@ -35,7 +35,7 @@ const verifyTokenAndAdmin = async (request, response, next) => {
   await verifyToken(request, response, async (err) => {
     if (err) return next(err);
 
-    if (request.user?.role === 'admin' || request.user?.isAdmin) {
+    if (request.user?.role === 'admin') {
       return next();
     } else {
       return next(createHttpError(403, 'Admin privileges required'));

@@ -47,12 +47,14 @@ router.post("/login", async (request, response, next) => {
 
   try {
     if (!email || !password) {
-      return next(createHttpError(400, 'All fields are required'));
+      const error = createHttpError(400, 'All fields are required');
+        return next (error);
     }
 
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
-      return next(createHttpError(401, 'Invalid email or password'));
+      const error = createHttpError(401, 'Invalid email or password');
+      return next(error);
     }
 
     const accessToken = jwt.sign(
