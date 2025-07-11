@@ -5,23 +5,22 @@ const createHttpError = require('http-errors');
 
 // Create a new home listing
 router.post('/', verifyTokenAndAdmin, async (req, res, next) => {
-    const { type, images, price, title, subtitle, location, capacity, features, rating, available, description } = req.body;
+    const { type, images, price, title, subtitle, location, capacity, features, available, description } = req.body;
 
     try {
-        if (!type || !images || !price || !title || !subtitle || !location || !capacity || !features || !rating || !available || !description) {
+        if (!type || !images || !title || !price || !subtitle || !location || !capacity || !features ||  !available || !description) {
             return next(createHttpError(400, 'All fields are required'));
         }
 
         const newHome = new Home({
             type,
             images,
-            price,
             title,
+            price,
             subtitle,
             location,
             capacity,
             features,
-            rating,
             available,
             description
         });
@@ -47,6 +46,7 @@ router.get('/', async (req, res, next) => {
 
 // Get a home listing by ID
 router.get('/:id', async (req, res, next) => {
+  
     const { id } = req.params;
 
     try {
@@ -65,6 +65,8 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id',verifyTokenAndAdmin, async (req, res, next) => {          
     const { id } = req.params;
     const { type, images, price, title, subtitle, location, capacity, features, rating, available } = req.body;
+     console.log("Updating home with ID:", req.params.id);
+  console.log("Update fields:", req.body);
 
     try {
         const updatedHome = await Home.findByIdAndUpdate(id, {

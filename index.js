@@ -29,16 +29,16 @@ const MONGOURL = process.env.MONGOURL;
 application.use(express.json());
 // Middleware to parse URL-encoded data (optional)
 application.use(cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
     credentials: true
 })
 ); 
 
 // Routes
-application.use("/auth", authRoutes);
-application.use("/testimonial", testimonialRoutes);
-application.use("/request", requestRoutes);
-application.use("/home", homeRoutes);
+application.use("/api/auth", authRoutes);
+application.use("/api/testimonial", testimonialRoutes);
+application.use("/api/request", requestRoutes);
+application.use("/api/home", homeRoutes);
 
 // Middleware to handle 404 errors and global errors
 application.use(notFound);

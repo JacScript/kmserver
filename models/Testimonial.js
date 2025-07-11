@@ -23,11 +23,22 @@ const schema = new Schema({
   },
 
   // Optional country flag image URL (e.g., to show nationality)
-  flagImg: {
+  flag: {
     type: String,
     required: false,
     // Example: "https://example.com/flags/france.png"
-  }
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1, // Minimum rating value
+    max: 5, // Maximum rating value
+  },
+  featured: {
+    type: Boolean,
+    default: false, // Default to false if not specified
+    // Indicates if this testimonial should be highlighted on the site
+  },
 }, {
   timestamps: true, // Automatically includes createdAt and updatedAt
 });

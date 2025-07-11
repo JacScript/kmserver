@@ -3,13 +3,14 @@ const User = require('../models/User');
 const createHttpError = require("http-errors");
 const jwt = require('jsonwebtoken');
 const { verifyTokenAndAdmin } = require('../middlewares/verifyToken');
+const  generateToken = require("../utils/generateToken");
 
 // Register new user
 router.post("/register", async (request, response, next) => {
-  const { username, password, email, role } = request.body;
+  const { username, password, email} = request.body;
 
   try {
-    if (!username || !password || !email || !role) {
+    if (!username || !password || !email) {
       return next(createHttpError(400, 'All fields are required'));
     }
 
@@ -18,20 +19,23 @@ router.post("/register", async (request, response, next) => {
       return next(createHttpError(400, 'User already exists'));
     }
 
-    const user = await User.create({ username, email, password, role });
+    const user = await User.create({ username, email, password });
 
-    const accessToken = jwt.sign(
-      { id: user._id, isAdmin: user.role === 'admin' },
-      process.env.JWT_SEC,
-      { expiresIn: "30d" }
-    );
+     // Generate token and set cookie
 
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true, // Enable only if using HTTPS
-      sameSite: 'none', // Set based on frontend deployment
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    });
+     await generateToken(response, user._id);
+    // const accessToken = jwt.sign(
+    //   { id: user._id, isAdmin: user.role === 'admin' },
+    //   process.env.JWT_SEC,
+    //   { expiresIn: "30d" }
+    // );
+
+    // response.cookie('accessToken', accessToken, {
+    //   httpOnly: true,
+    //   secure: true, // Enable only if using HTTPS
+    //   sameSite: 'none', // Set based on frontend deployment
+    //   expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    // });
 
     const { password: _, ...others } = user.toObject();
     response.status(201).json({ success: true, message: "User created", data: others });
@@ -57,18 +61,22 @@ router.post("/login", async (request, response, next) => {
       return next(error);
     }
 
-    const accessToken = jwt.sign(
-      { id: user._id, isAdmin: user.role === 'admin' },
-      process.env.JWT_SEC,
-      { expiresIn: "30d" }
-    );
 
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    });
+    // Generate token and set cookie
+    await generateToken(response, user._id);
+
+    // const accessToken = jwt.sign(
+    //   { id: user._id, isAdmin: user.role === 'admin' },
+    //   process.env.JWT_SEC,
+    //   { expiresIn: "30d" }
+    // );
+
+    // response.cookie('accessToken', accessToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    // });
 
     const { password: _, ...others } = user.toObject();
     response.status(200).json({ success: true, message: "Logged in successfully", data: others });
@@ -79,9 +87,15 @@ router.post("/login", async (request, response, next) => {
 });
 
 // Logout route
-router.post("/logout", verifyTokenAndAdmin, async (request, response, next) => {
+router.post("/logout", async (request, response, next) => {
   try {
-    response.clearCookie('accessToken');
+    response.cookie('jwt', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development", // Enable only if using HTTPS
+      sameSite: 'strict', // Set based on frontend deployment
+      expires: new Date(0), // Set expiration to the past to clear the cookie
+    }); 
+    // response.clearCookie('jwt');
     response.status(200).json({ success: true, message: "Successfully logged out" });
   } catch (error) {
     return next(createHttpError(500, "Logout failed"));

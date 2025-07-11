@@ -18,12 +18,12 @@ const schema = new Schema({
         required: [true, 'Price is required.'], // Added custom error message
         min: [0, 'Price must be a positive number.'] // Example validation
     },
-    title: {
-        type: String,
+    title: 
+       { type: String,
         required: [true, 'Title is required.'], // Added custom error message
         trim: true, // Trim whitespace from the beginning and end of the string
         minlength: [2, 'Title must be at least 2 characters long.'] // Example validation
-    },
+},
     subtitle: {
         type: String,
         required: [true, 'Subtitle is required.'], // Added custom error message
@@ -36,10 +36,10 @@ const schema = new Schema({
         trim: true, // Trim whitespace from the beginning and end of the string
         minlength: [2, 'Location must be at least 2 characters long.'] // Example validation
     },
-    capacity: {
-        type: String,
-        required: [true, 'Capacity is required.'], // Added custom error message
-         minlength: [2, 'Capacity must be at least 2 characters long.'] // Example validation
+    guests: {
+        type: Number,
+        required: [true, 'Guests is required.'], // Added custom error message
+        min: [1, 'Guest must be a positive number.'] // Example validation
     },
     features: [
         {
@@ -49,15 +49,15 @@ const schema = new Schema({
             minlength: [2, 'Feature must be at least 2 characters long.'] // Example validation
         }
     ],
-    rating: {
-        type: Number,
-        required: [true, 'Rating is required.'], // Added custom error message
-        min: [0, 'Rating must be a positive number.'], // Example validation
-        max: [5, 'Rating cannot exceed 5.'] // Example validation}
-    },
+    // rating: {
+    //     type: Number,
+    //     required: [true, 'Rating is required.'], // Added custom error message
+    //     min: [0, 'Rating must be a positive number.'], // Example validation
+    //     max: [5, 'Rating cannot exceed 5.'] // Example validation}
+    // },
     available: {
         type: String,
-        required: [true, 'Availability status is required.'], // Added custom error message
+        // required: [true, 'Availability status is required.'], // Added custom error message
         enum: ['available', 'unavailable'], // Example validation for availability status
         default: 'available' // Default value if not specified
     },

@@ -1,35 +1,3 @@
-// const { model , Schema} = require("mongoose");
-
-
-// const schema = new Schema({
-//    destination: {
-//     type: String,
-//     required: true,
-//   },
-//   activity: {
-//     type: String,
-//     required: true,
-//   },
-//   date: {
-//     type: Date,
-//     required: true,
-//   },
-//   email: {
-//     type: String,
-//     required: true,
-//   },
-//    } , {timestamps: true});
-
-//    // Optional: Improve performance by indexing the timestamp fields
-//    schema.index({ createdAt: -1 }, { background: true }); // For sorting by most recent
-//    schema.index({ updatedAt: -1 }, { background: true }); // For detecting recent updates
-   
-//    // Create and export the Testimonial model
-//    const Request = model('Request', schema);
-
-//    // Export the Request model for use in other parts of the application
-//    module.exports = Request;
-
 const { model, Schema } = require("mongoose");
 
 // Define the schema for the Request model

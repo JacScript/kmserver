@@ -4,21 +4,21 @@ const User = require("../models/User");
 
 // Middleware to verify access token from cookies
 const verifyToken = async (request, response, next) => {
-  const  {accessToken } = await request.cookies;
-    // console.log(accessToken);
+  let  token = await request.cookies.jwt;
+    // console.log(token);
 
 
   try {
-    // console.log(accessToken);
+    // console.log(token);
 
-    if (!accessToken) {
+    if (!token) {
       return next(createHttpError(401, 'Access token missing'));
     }
 
     // Decode and verify the token
-    const decoded = jwt.verify(accessToken, process.env.JWT_SEC);
+    const decoded = jwt.verify(token, process.env.JWT_SEC);
     
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.id).select("-password -__v"); 
     if (!user) {
       return next(createHttpError(401, 'User does not exist'));
     }
