@@ -55,12 +55,18 @@ const schema = new Schema({
     //     min: [0, 'Rating must be a positive number.'], // Example validation
     //     max: [5, 'Rating cannot exceed 5.'] // Example validation}
     // },
+    // available: {
+    //     type: String,
+    //     // required: [true, 'Availability status is required.'], // Added custom error message
+    //     enum: ['available', 'unavailable'], // Example validation for availability status
+    //     default: 'available' // Default value if not specified
+    // },
+
     available: {
-        type: String,
-        // required: [true, 'Availability status is required.'], // Added custom error message
-        enum: ['available', 'unavailable'], // Example validation for availability status
-        default: 'available' // Default value if not specified
-    },
+    type: Boolean,
+    // required: [true, 'Availability status is required.'], // Keep if you want it required
+    default: true // Default to true or false as per your business logic
+},
     description: {
         type: String,
         required: [true, 'Description is required.'], // Added custom error message
