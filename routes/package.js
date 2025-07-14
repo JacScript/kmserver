@@ -5,7 +5,7 @@ const createHttpError = require('http-errors');
 
 // Create a new package
 router.post('/', verifyTokenAndAdmin, async (req, res, next) => {
-  console.log('Creating a new package with data:', req.body);
+  // console.log('Creating a new package with data:', req.body);
   const {
     title,
     subtitle,
@@ -110,6 +110,28 @@ router.put('/:id',verifyTokenAndAdmin, async (req, res, next) => {
         return next(createHttpError(500, 'Internal server error'));
     }
 });
+
+//delete a package by ID
+router.delete('/:id', verifyTokenAndAdmin, async (req, res, next) =>{
+  const { id } = req.params;
+  console.log("Deleting package with ID:", id);
+
+  try {
+    const deletedPackage = await Package.findByIdAndDelete(id);
+    if (!deletedPackage) {
+      return next(createHttpError(404, 'Package not found'));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Package deleted successfully',
+      data: deletedPackage
+    });
+  } catch (err) {
+    // console.error(err);
+    return next(createHttpError(500, 'Internal server error'));
+  }
+})
 
 
 module.exports = router;
