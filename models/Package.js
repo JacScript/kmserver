@@ -51,6 +51,11 @@ const schema = new Schema({
   bgColor: {
     type: String,
     default: "bg-red-50"
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive'],
+    default: 'active',
   }
 //   type: {
 //     type: String,
