@@ -29,8 +29,8 @@ const MONGOURL = process.env.MONGOURL;
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5000",
-  "https://kaimaembe.com/",
-  "https://admin.kaimaembe.com"
+  // "https://kaimaembe.com/",
+  // "https://admin.kaimaembe.com"
   // "http://127.0.0.1:3001",
   // "http://127.0.0.1:5000"
 ];
@@ -63,6 +63,9 @@ application.use(cors({
 }));
 
 // Routes
+application.get("/", (req, res) => {
+    res.send("Welcome to KM Tours API");
+});
 application.use("/api/auth", authRoutes);
 application.use("/api/testimonial", testimonialRoutes);
 application.use("/api/request", requestRoutes);
