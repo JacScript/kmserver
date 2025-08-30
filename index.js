@@ -15,6 +15,9 @@ const testimonialRoutes = require("./routes/testimonial.js");
 const requestRoutes = require("./routes/request.js");
 const homeRoutes = require("./routes/home.js");
 const packageRoutes = require("./routes/package.js");
+const homePageRoutes = require("./routes/homepage.js");
+
+
 const cors = require("cors")
 
 // Create Express app
@@ -71,6 +74,7 @@ application.use("/api/testimonial", testimonialRoutes);
 application.use("/api/request", requestRoutes);
 application.use("/api/home", homeRoutes);
 application.use("/api/package", packageRoutes);
+application.use("/api/homepage", homePageRoutes);
 
 // Middleware to handle 404 errors and global errors
 application.use(notFound);
