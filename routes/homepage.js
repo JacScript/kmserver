@@ -66,6 +66,7 @@ router.get('/:id', async (req, res, next) => {
 
 // Update homepage content by ID
 router.put('/:id', verifyTokenAndAdmin, async (req, res, next) => {
+   // console.log("Update request body:", req.body); // Debugging line
     const { id } = req.params;
 
       // Validate if ID is a valid MongoDB ObjectId
