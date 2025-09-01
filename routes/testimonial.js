@@ -75,8 +75,8 @@ router.get("/", async (request, response, next) => {
 // @route   PUT /testimonial/:id
 // @access  Private (Admin Only)
 router.put("/:id", verifyTokenAndAdmin, async (request, response, next) => {
-  console.log("Updating testimonial with ID:", request.params.id);
-  console.log("Update fields:", request.body);
+  // console.log("Updating testimonial with ID:", request.params.id);
+  // console.log("Update fields:", request.body);
   const { id } = request.params;
   const updateFields = request.body;
 
