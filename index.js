@@ -16,6 +16,7 @@ const requestRoutes = require("./routes/request.js");
 const homeRoutes = require("./routes/home.js");
 const packageRoutes = require("./routes/package.js");
 const homePageRoutes = require("./routes/homepage.js");
+const aboutRoutes = require("./routes/about.js");
 
 
 const cors = require("cors")
@@ -75,6 +76,7 @@ application.use("/api/request", requestRoutes);
 application.use("/api/home", homeRoutes);
 application.use("/api/package", packageRoutes);
 application.use("/api/homepage", homePageRoutes);
+application.use("/api/about", aboutRoutes);
 
 // Middleware to handle 404 errors and global errors
 application.use(notFound);

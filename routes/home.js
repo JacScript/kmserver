@@ -28,7 +28,7 @@ router.post('/', verifyTokenAndAdmin, async (req, res, next) => {
         const savedHome = await newHome.save();
         res.status(201).json({ success: true, message: "Home listing created successfully", data: savedHome });
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         return next(createHttpError(500, 'Internal server error'));
     }
 });
@@ -39,7 +39,7 @@ router.get('/', async (req, res, next) => {
         const homes = await Home.find().sort({ createdAt: -1 });
         res.status(200).json({ success: true, data: homes });
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         return next(createHttpError(500, 'Internal server error'));
     }
 }); 
@@ -56,7 +56,7 @@ router.get('/:id', async (req, res, next) => {
         }
         res.status(200).json({ success: true, data: home });
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         return next(createHttpError(500, 'Internal server error'));
     }
 });
@@ -65,8 +65,8 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id',verifyTokenAndAdmin, async (req, res, next) => {          
     const { id } = req.params;
     const { type, images, price, title, subtitle, location, capacity, features, rating, available } = req.body;
-     console.log("Updating home with ID:", req.params.id);
-  console.log("Update fields:", req.body);
+    //  console.log("Updating home with ID:", req.params.id);
+//   console.log("Update fields:", req.body);
 
     try {
         const updatedHome = await Home.findByIdAndUpdate(id, {
@@ -104,7 +104,7 @@ router.delete('/:id', verifyTokenAndAdmin, async (req, res, next) => {
         }
         res.status(200).json({ success: true, message: "Home listing deleted successfully" });
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         return next(createHttpError(500, 'Internal server error'));
     }
 });     
