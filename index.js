@@ -35,7 +35,7 @@ const allowedOrigins = [
   "http://www.kaimaembe.com",
   "http://localhost:5000",
   "https://kaimaembe.com",
-  "https://admin.kaimaembe.com"
+  "http://kaimaembe.com"
   // "http://127.0.0.1:3001",
   // "http://127.0.0.1:5000"
 ];
