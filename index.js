@@ -31,10 +31,10 @@ const port = process.env.PORT || 3000;
 const MONGOURL = process.env.MONGOURL;
 
 const allowedOrigins = [
+  "https://kaimaembe.com",
   "https://www.kaimaembe.com",
   "http://www.kaimaembe.com",
   "http://localhost:5000",
-  "https://kaimaembe.com",
   "http://kaimaembe.com"
   // "http://127.0.0.1:3001",
   // "http://127.0.0.1:5000"
