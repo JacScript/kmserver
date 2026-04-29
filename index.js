@@ -35,24 +35,13 @@ const allowedOrigins = [
   "https://www.kaimaembe.com",
   "http://www.kaimaembe.com",
   "http://localhost:5000",
-  "http://kaimaembe.com"
-  // "http://127.0.0.1:3001",
-  // "http://127.0.0.1:5000"
+  "http://kaimaembe.com",
+  "https://kaimaembe.com"
 ];
 
 // Parse JSON requests
 application.use(express.json());
-// Middleware to parse URL-encoded data (optional)
-// ✅ Correct syntax with proper indentation and corrected origin IP
-// application.use(cors({
-//   origin: [
-//     "http://localhost:3000",
-//     "http://127.0.0.1:3000",
-//     "http://localhost:5000",
-//     "http://127.0.0.1:5000"
-//   ],
-//   credentials: true
-// }));
+
 
 application.use(cors({
   origin: function (origin, callback) {
