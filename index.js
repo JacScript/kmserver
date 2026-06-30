@@ -152,7 +152,6 @@
 
 
 
-
 "use strict";
 
 const dotenv = require("dotenv");
@@ -207,7 +206,30 @@ app.use(
   })
 );
 
-// Routes
+// ── MongoDB ────────────────────────────────────────────────────────────────
+// Connect once per container lifetime. The isConnected guard means warm
+// invocations skip the connect() call entirely and go straight to next().
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected) return;
+  await mongoose.connect(process.env.MONGOURL);
+  isConnected = true;
+  console.log("MongoDB connected");
+}
+
+// Must be registered BEFORE routes so every request waits for the connection.
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    res.status(500).json({ success: false, message: "Database connection failed" });
+  }
+});
+
+// ── Routes ──────────────────────────────────────────────────────────────────
 app.get("/", (req, res) => res.send("Welcome to KM Tours API"));
 app.use("/api/v2/homepage", homePageRoutes);
 app.use("/api/v1/auth", authRoutes);
@@ -230,25 +252,11 @@ app.use("/api/v1/photos", photoRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// Connect to MongoDB once — shared across serverless invocations.
-// Vercel keeps the Node process warm between requests, so we avoid
-// reconnecting on every call by caching the connection state.
-let isConnected = false;
-
-async function connectDB() {
-  if (isConnected) return;
-  await mongoose.connect(process.env.MONGOURL);
-  isConnected = true;
-  console.log("MongoDB connected");
-}
-
-connectDB().catch((err) => console.error("MongoDB connection error:", err));
-
-// Local dev — only start the HTTP server when not running on Vercel
+// Local dev only
 if (process.env.NODE_ENV !== "production") {
   const port = process.env.PORT || 3000;
   app.listen(port, () => console.log(`Server running on port ${port}`));
 }
 
-// Required by Vercel — export the Express app as the serverless handler
+// Vercel serverless handler
 module.exports = app;
