@@ -1,7 +1,17 @@
-const { model, Schema} = require("mongoose");
+const { model, Schema } = require("mongoose");
 
-//Define the schema for the Home model
+// Define the schema for the Apartment model
 const schema = new Schema({
+    // Used to build the apartment's own URL (/apartments/:slug) and to look
+    // it up on the detail page — required by the frontend's routing.
+    slug: {
+        type: String,
+        required: [true, 'Slug is required.'],
+        trim: true,
+        lowercase: true,
+        unique: true,
+        minlength: [2, 'Slug must be at least 2 characters long.']
+    },
     type: {
         type: String,
         required: [true, 'Type is required.'], // Added custom error message
@@ -55,18 +65,22 @@ const schema = new Schema({
     //     min: [0, 'Rating must be a positive number.'], // Example validation
     //     max: [5, 'Rating cannot exceed 5.'] // Example validation}
     // },
-    // available: {
-    //     type: String,
-    //     // required: [true, 'Availability status is required.'], // Added custom error message
-    //     enum: ['available', 'unavailable'], // Example validation for availability status
-    //     default: 'available' // Default value if not specified
-    // },
 
-    available: {
-    type: Boolean,
-    // required: [true, 'Availability status is required.'], // Keep if you want it required
-    default: true // Default to true or false as per your business logic
-},
+    // Renamed from `available` to `availability` to match what the
+    // frontend (ApartmentCard / ApartmentDetailPage) actually reads.
+    availability: {
+        type: Boolean,
+        default: true // Default to true or false as per your business logic
+    },
+
+    // Human-readable date shown when availability is false, e.g.
+    // "September 2025" — drives the "Available starting from..." line
+    // on the card and the announcement banner on the detail page.
+    availableFrom: {
+        type: String,
+        trim: true
+    },
+
     description: {
         type: String,
         required: [true, 'Description is required.'], // Added custom error message
@@ -81,8 +95,8 @@ const schema = new Schema({
 schema.index({ createdAt: -1 }, { background: true }); // For sorting by most recent
 schema.index({ updatedAt: -1 }, { background: true }); // For detecting recent updates
 
-// Create and export the Home model
-const Home = model('Home', schema);
+// Create and export the HolidayHomePage model
+const HolidayHomePage = model('HolidayHomePage', schema);
 
-// Export the Home model for use in other parts of the application
-module.exports = Home;
+// Export the HolidayHomePage model for use in other parts of the application
+module.exports = HolidayHomePage;

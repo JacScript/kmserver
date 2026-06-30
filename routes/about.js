@@ -4,6 +4,8 @@ const createHttpError = require("http-errors");
 const { verifyTokenAndAdmin } = require('../middlewares/verifyToken');
 const { isValidObjectId } = require("mongoose");
 
+const ALLOWED_SECTIONS = ['mainContent', 'whoweareSection', 'valueSection'];
+
 // Create or Update About Information
 router.post("/", verifyTokenAndAdmin, async (request, response, next) => {
     try {
@@ -79,6 +81,54 @@ router.put("/:id", verifyTokenAndAdmin, async (request, response, next) => {
             return next(createHttpError(404, 'About information not found'));
         }
         response.status(200).json({ success: true, message: "About information updated", data: about });
+    } catch (err) {
+        console.error(err);
+        return next(createHttpError(500, 'Internal server error'));
+    }
+});
+
+// Update a single section of the About document by ID, without touching
+// the rest of it. e.g. PATCH /api/about/<id>/section/whoweareSection
+// - mainContent / whoweareSection expect an object body (the section's own fields)
+// - valueSection expects an array body, since that section is an array itself
+router.patch("/:id/section/:sectionName", verifyTokenAndAdmin, async (request, response, next) => {
+    const { id, sectionName } = request.params;
+
+    if (!isValidObjectId(id)) {
+        return next(createHttpError(400, 'Invalid ID format'));
+    }
+
+    if (!ALLOWED_SECTIONS.includes(sectionName)) {
+        return next(
+            createHttpError(400, `Invalid section. Must be one of: ${ALLOWED_SECTIONS.join(', ')}`)
+        );
+    }
+
+    const isEmptyBody =
+        request.body === undefined ||
+        request.body === null ||
+        (typeof request.body === "object" && Object.keys(request.body).length === 0);
+
+    if (isEmptyBody) {
+        return next(createHttpError(400, 'Request body cannot be empty'));
+    }
+
+    try {
+        const updatedAbout = await About.findByIdAndUpdate(
+            id,
+            { $set: { [sectionName]: request.body } },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedAbout) {
+            return next(createHttpError(404, 'About information not found'));
+        }
+
+        response.status(200).json({
+            success: true,
+            message: `${sectionName} updated successfully`,
+            data: updatedAbout
+        });
     } catch (err) {
         console.error(err);
         return next(createHttpError(500, 'Internal server error'));

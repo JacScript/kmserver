@@ -60,13 +60,13 @@ application.use(cors({
 application.get("/", (req, res) => {
     res.send("Welcome to KM Tours API");
 });
-application.use("/api/auth", authRoutes);
+application.use("/api/v2/homepage", homePageRoutes);
+application.use("/api/v1/auth", authRoutes);
 application.use("/api/testimonial", testimonialRoutes);
 application.use("/api/request", requestRoutes);
 application.use("/api/home", homeRoutes);
 application.use("/api/package", packageRoutes);
-application.use("/api/homepage", homePageRoutes);
-application.use("/api/about", aboutRoutes);
+application.use("/api/v2/about", aboutRoutes);
 
 // Middleware to handle 404 errors and global errors
 application.use(notFound);
@@ -90,7 +90,7 @@ async function connectWithRetry() {
 
         // If the database connection is successful, start the server
         application.listen(port, '127.0.0.1', () => {
-            console.log('Server listening on port 8000');
+            // console.log('Server listening on port 8000');
             console.log(`Database has been connected and server is running on port ${port}`);
         });
 

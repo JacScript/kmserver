@@ -9,9 +9,8 @@ const schema = new Schema({
   },
   heroSection: {
     heading: { 
-      type: String, 
-      trim: true, 
-      default: "from Tanzania to France" 
+      type: [String], 
+      default: ["from Tanzania to France", "from France to Tanzania"] 
     },
     subheading: { 
       type: String, 
@@ -58,6 +57,67 @@ const schema = new Schema({
           description: "Description for Slide 2"
         }
       ]
+    },
+    // The destination/activity/contact bar that overlaps the bottom edge
+    // of the hero background image.
+    searchBar: {
+      destination: {
+        label: {
+          type: String,
+          trim: true,
+          default: "Destination"
+        },
+        placeholder: {
+          type: String,
+          trim: true,
+          default: "Select a Destination"
+        },
+        icon: {
+          type: String,
+          trim: true,
+          default: "map-pin"
+        },
+        options: {
+          type: [String],
+          // Mirrors the cities already offered in featuredSections.
+          default: ["Brussels", "Barcelona", "Amsterdam", "Rome", "Greece", "Berlin"]
+        }
+      },
+      activity: {
+        label: {
+          type: String,
+          trim: true,
+          default: "Activity"
+        },
+        placeholder: {
+          type: String,
+          trim: true,
+          default: "Select an Activity"
+        },
+        icon: {
+          type: String,
+          trim: true,
+          default: "hiking"
+        },
+        options: {
+          type: [String],
+          default: ["Select an Activity","City Tour", "Cultural Experience", "Beach Activities"]
+        }
+      },
+      // Icon-only quick action (envelope icon in the design) — links to the
+      // existing contact anchor used elsewhere on this page.
+      contact: {
+        icon: {
+          type: String,
+          trim: true,
+          default: "mail"
+        },
+        link: {
+          type: String,
+          trim: true,
+          default: "#homecontact"
+        }
+      }
     }
   },
 
