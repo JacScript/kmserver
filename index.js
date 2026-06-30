@@ -1,13 +1,167 @@
+// "use strict";
+
+// // Load environment variables
+// const dotenv = require("dotenv");
+// dotenv.config();
+
+// // Imports
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const cookieParser = require("cookie-parser");
+
+// const { notFound, errorHandler } = require("./middlewares/globalErrorHandler");
+// const authRoutes = require("./routes/auth.js");
+// const testimonialRoutes = require("./routes/testimonial.js");
+// const requestRoutes = require("./routes/request.js");
+// const holidayHomeRoutes = require("./routes/home.js");
+// const packageRoutes = require("./routes/package.js");
+// const homePageRoutes = require("./routes/homepage.js");
+// const aboutRoutes = require("./routes/about.js");
+// const apartmentRoutes = require("./routes/apartment.js");
+// const orderRoutes = require("./routes/order.js");
+// const nespressopageRoutes = require("./routes/nespressopage.js");
+// const nespressopMachineRoutes = require("./routes/nespressomachine.js");
+// const nespressopCapsuleRoutes = require("./routes/nespressocapsule.js");
+// const nespressopAccessoryRoutes = require("./routes/nespressoaccessory.js");
+// const kiswahiliPageRoutes = require("./routes/kiswahilipage.js");
+// const galleryPageRoutes = require("./routes/gallerypage.js");
+// const galleryCategoryRoutes = require("./routes/gallerycategory.js");
+// const photoRoutes = require("./routes/photo.js");
+
+
+// const cors = require("cors")
+
+// // Create Express app
+// const application = express();
+// application.use(express.urlencoded({ extended: true }));
+// application.use(cookieParser()); // ✅ Enables reading cookies
+
+// // Environment config
+// const port = process.env.PORT || 3000;
+// const MONGOURL = process.env.MONGOURL;
+
+// const allowedOrigins = [
+//   "https://kaimaembe.com",
+//   "https://www.kaimaembe.com",
+//   "http://www.kaimaembe.com",
+//   "http://localhost:5000",
+//   "http://kaimaembe.com",
+//   "https://kaimaembe.com"
+// ];
+
+// // Parse JSON requests
+// application.use(express.json());
+
+
+// application.use(cors({
+//   origin: function (origin, callback) {
+//     // allow requests with no origin like curl or mobile apps
+//     if (!origin) return callback(null, true);
+//     if (allowedOrigins.includes(origin)) {
+//       return callback(null, true);
+//     } else {
+//       return callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true
+// }));
+
+// // Routes
+// application.get("/", (req, res) => {
+//     res.send("Welcome to KM Tours API");
+// });
+// application.use("/api/v2/homepage", homePageRoutes);
+// application.use("/api/v1/auth", authRoutes);
+// application.use("/api/testimonial", testimonialRoutes);
+// application.use("/api/request", requestRoutes);
+// application.use("/api/v2/holiday-home", holidayHomeRoutes);
+// application.use("/api/package", packageRoutes);
+// application.use("/api/v2/about", aboutRoutes);
+// application.use('/api/v2/apartment', apartmentRoutes);
+// application.use('/api/v1/orders', orderRoutes);
+// application.use('/api/v1/nespresso-machines', nespressopMachineRoutes);
+// application.use('/api/v1/nespresso-capsules', nespressopCapsuleRoutes);
+// application.use('/api/v1/nespresso-accessories', nespressopAccessoryRoutes);
+// application.use('/api/v1/nespresso-page', nespressopageRoutes);
+// application.use('/api/v1/kiswahili-page', kiswahiliPageRoutes);
+// application.use('/api/v1/gallery', galleryPageRoutes);
+// application.use('/api/v1/gallery-category', galleryCategoryRoutes);
+// application.use('/api/v1/photos', photoRoutes);
+
+
+// // Middleware to handle 404 errors and global errors
+// application.use(notFound);
+// application.use(errorHandler);
+
+
+// // Function to connect to MongoDB with retry logic
+// async function connectWithRetry() {
+//     try {
+//         // Attempt to connect to the MongoDB database
+//         await mongoose.connect(MONGOURL,
+//             {
+//                 // Options to deal with deprecation warnings
+//                 // useCreateIndex: true,
+//                 // useFindAndModify: false,
+//                 useUnifiedTopology: true,
+//                 useNewUrlParser: true,
+//             }
+//         );
+      
+
+//         // If the database connection is successful, start the server
+//         application.listen(port, '127.0.0.1', () => {
+//             // console.log('Server listening on port 8000');
+//             console.log(`Database has been connected and server is running on port ${port}`);
+//         });
+
+//     } catch (error) {
+//         // Log any connection errors and retry after 5 seconds
+//         console.log(`Database connection error: ${error.message}`);
+//         setTimeout(connectWithRetry, 5000);
+//     }
+// }
+
+// // Attempt to connect to the database when the server starts
+// connectWithRetry();
+
+// // Graceful shutdown handling (Optional but recommended)
+// // process.on('SIGINT', async () => {
+// //     console.log('Shutting down server...');
+// //     await mongoose.connection.close();
+// //     process.exit(0); // Exit gracefully
+// // });
+
+// // // Handle uncaught exceptions and unhandled rejections
+// // process.on('uncaughtException', (err) => {
+// //     console.error('Uncaught Exception:', err);
+// //     process.exit(1); // Exit the process after handling the error
+// // });
+
+// // process.on('unhandledRejection', (reason, promise) => {
+// //     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+// //     process.exit(1); // Exit the process after handling the rejection
+// // });
+
+
+
+
+
+
+
+
+
+
+
 "use strict";
 
-// Load environment variables
 const dotenv = require("dotenv");
 dotenv.config();
 
-// Imports
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const { notFound, errorHandler } = require("./middlewares/globalErrorHandler");
 const authRoutes = require("./routes/auth.js");
@@ -28,117 +182,73 @@ const galleryPageRoutes = require("./routes/gallerypage.js");
 const galleryCategoryRoutes = require("./routes/gallerycategory.js");
 const photoRoutes = require("./routes/photo.js");
 
-
-const cors = require("cors")
-
-// Create Express app
-const application = express();
-application.use(express.urlencoded({ extended: true }));
-application.use(cookieParser()); // ✅ Enables reading cookies
-
-// Environment config
-const port = process.env.PORT || 3000;
-const MONGOURL = process.env.MONGOURL;
+const app = express();
 
 const allowedOrigins = [
   "https://kaimaembe.com",
   "https://www.kaimaembe.com",
   "http://www.kaimaembe.com",
   "http://localhost:5000",
+  "http://localhost:5173",
   "http://kaimaembe.com",
-  "https://kaimaembe.com"
 ];
 
-// Parse JSON requests
-application.use(express.json());
-
-
-application.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin like curl or mobile apps
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+    },
+    credentials: true,
+  })
+);
 
 // Routes
-application.get("/", (req, res) => {
-    res.send("Welcome to KM Tours API");
-});
-application.use("/api/v2/homepage", homePageRoutes);
-application.use("/api/v1/auth", authRoutes);
-application.use("/api/testimonial", testimonialRoutes);
-application.use("/api/request", requestRoutes);
-application.use("/api/v2/holiday-home", holidayHomeRoutes);
-application.use("/api/package", packageRoutes);
-application.use("/api/v2/about", aboutRoutes);
-application.use('/api/v2/apartment', apartmentRoutes);
-application.use('/api/v1/orders', orderRoutes);
-application.use('/api/v1/nespresso-machines', nespressopMachineRoutes);
-application.use('/api/v1/nespresso-capsules', nespressopCapsuleRoutes);
-application.use('/api/v1/nespresso-accessories', nespressopAccessoryRoutes);
-application.use('/api/v1/nespresso-page', nespressopageRoutes);
-application.use('/api/v1/kiswahili-page', kiswahiliPageRoutes);
-application.use('/api/v1/gallery', galleryPageRoutes);
-application.use('/api/v1/gallery-category', galleryCategoryRoutes);
-application.use('/api/v1/photos', photoRoutes);
+app.get("/", (req, res) => res.send("Welcome to KM Tours API"));
+app.use("/api/v2/homepage", homePageRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/testimonial", testimonialRoutes);
+app.use("/api/request", requestRoutes);
+app.use("/api/v2/holiday-home", holidayHomeRoutes);
+app.use("/api/package", packageRoutes);
+app.use("/api/v2/about", aboutRoutes);
+app.use("/api/v2/apartment", apartmentRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/nespresso-machines", nespressopMachineRoutes);
+app.use("/api/v1/nespresso-capsules", nespressopCapsuleRoutes);
+app.use("/api/v1/nespresso-accessories", nespressopAccessoryRoutes);
+app.use("/api/v1/nespresso-page", nespressopageRoutes);
+app.use("/api/v1/kiswahili-page", kiswahiliPageRoutes);
+app.use("/api/v1/gallery", galleryPageRoutes);
+app.use("/api/v1/gallery-category", galleryCategoryRoutes);
+app.use("/api/v1/photos", photoRoutes);
 
+app.use(notFound);
+app.use(errorHandler);
 
-// Middleware to handle 404 errors and global errors
-application.use(notFound);
-application.use(errorHandler);
+// Connect to MongoDB once — shared across serverless invocations.
+// Vercel keeps the Node process warm between requests, so we avoid
+// reconnecting on every call by caching the connection state.
+let isConnected = false;
 
-
-// Function to connect to MongoDB with retry logic
-async function connectWithRetry() {
-    try {
-        // Attempt to connect to the MongoDB database
-        await mongoose.connect(MONGOURL,
-            {
-                // Options to deal with deprecation warnings
-                // useCreateIndex: true,
-                // useFindAndModify: false,
-                useUnifiedTopology: true,
-                useNewUrlParser: true,
-            }
-        );
-      
-
-        // If the database connection is successful, start the server
-        application.listen(port, '127.0.0.1', () => {
-            // console.log('Server listening on port 8000');
-            console.log(`Database has been connected and server is running on port ${port}`);
-        });
-
-    } catch (error) {
-        // Log any connection errors and retry after 5 seconds
-        console.log(`Database connection error: ${error.message}`);
-        setTimeout(connectWithRetry, 5000);
-    }
+async function connectDB() {
+  if (isConnected) return;
+  await mongoose.connect(process.env.MONGOURL);
+  isConnected = true;
+  console.log("MongoDB connected");
 }
 
-// Attempt to connect to the database when the server starts
-connectWithRetry();
+connectDB().catch((err) => console.error("MongoDB connection error:", err));
 
-// Graceful shutdown handling (Optional but recommended)
-// process.on('SIGINT', async () => {
-//     console.log('Shutting down server...');
-//     await mongoose.connection.close();
-//     process.exit(0); // Exit gracefully
-// });
+// Local dev — only start the HTTP server when not running on Vercel
+if (process.env.NODE_ENV !== "production") {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => console.log(`Server running on port ${port}`));
+}
 
-// // Handle uncaught exceptions and unhandled rejections
-// process.on('uncaughtException', (err) => {
-//     console.error('Uncaught Exception:', err);
-//     process.exit(1); // Exit the process after handling the error
-// });
-
-// process.on('unhandledRejection', (reason, promise) => {
-//     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-//     process.exit(1); // Exit the process after handling the rejection
-// });
+// Required by Vercel — export the Express app as the serverless handler
+module.exports = app;
