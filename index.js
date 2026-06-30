@@ -13,10 +13,20 @@ const { notFound, errorHandler } = require("./middlewares/globalErrorHandler");
 const authRoutes = require("./routes/auth.js");
 const testimonialRoutes = require("./routes/testimonial.js");
 const requestRoutes = require("./routes/request.js");
-const homeRoutes = require("./routes/home.js");
+const holidayHomeRoutes = require("./routes/home.js");
 const packageRoutes = require("./routes/package.js");
 const homePageRoutes = require("./routes/homepage.js");
 const aboutRoutes = require("./routes/about.js");
+const apartmentRoutes = require("./routes/apartment.js");
+const orderRoutes = require("./routes/order.js");
+const nespressopageRoutes = require("./routes/nespressoPage.js");
+const nespressopMachineRoutes = require("./routes/nespressoMachine.js");
+const nespressopCapsuleRoutes = require("./routes/nespressoCapsule.js");
+const nespressopAccessoryRoutes = require("./routes/nespressoAccessory.js");
+const kiswahiliPageRoutes = require("./routes/kiswahiliPage.js");
+const galleryPageRoutes = require("./routes/gallerypage.js");
+const galleryCategoryRoutes = require("./routes/gallerycategory.js");
+const photoRoutes = require("./routes/photo.js");
 
 
 const cors = require("cors")
@@ -64,9 +74,20 @@ application.use("/api/v2/homepage", homePageRoutes);
 application.use("/api/v1/auth", authRoutes);
 application.use("/api/testimonial", testimonialRoutes);
 application.use("/api/request", requestRoutes);
-application.use("/api/home", homeRoutes);
+application.use("/api/v2/holiday-home", holidayHomeRoutes);
 application.use("/api/package", packageRoutes);
 application.use("/api/v2/about", aboutRoutes);
+application.use('/api/v2/apartment', apartmentRoutes);
+application.use('/api/v1/orders', orderRoutes);
+application.use('/api/v1/nespresso-machines', nespressopMachineRoutes);
+application.use('/api/v1/nespresso-capsules', nespressopCapsuleRoutes);
+application.use('/api/v1/nespresso-accessories', nespressopAccessoryRoutes);
+application.use('/api/v1/nespresso-page', nespressopageRoutes);
+application.use('/api/v1/kiswahili-page', kiswahiliPageRoutes);
+application.use('/api/v1/gallery', galleryPageRoutes);
+application.use('/api/v1/gallery-category', galleryCategoryRoutes);
+application.use('/api/v1/photos', photoRoutes);
+
 
 // Middleware to handle 404 errors and global errors
 application.use(notFound);

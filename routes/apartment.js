@@ -3,13 +3,21 @@ const { isValidObjectId } = require("mongoose");
 const createHttpError = require("http-errors");
 const { verifyTokenAndAdmin } = require('../middlewares/verifyToken');
 const Apartment = require('../models/Apartment');
-const HolidayHomePage = require('../models/HolidayHomePage');
+const HolidayHomePage = require('../models/HolidayHome');
 
 // Create a new apartment listing
 router.post("/", verifyTokenAndAdmin, async (req, res, next) => {
     try {
         const apartment = new Apartment(req.body);
         const saved = await apartment.save();
+
+        // Auto-link to the Holiday Home page so new apartments show up
+        // immediately, without a separate manual linking step.
+        await HolidayHomePage.findOneAndUpdate(
+            {},
+            { $addToSet: { 'listingsSection.apartments': saved._id } }
+        );
+
         res.status(201).json({ success: true, message: "Apartment created", data: saved });
     } catch (err) {
         if (err.code === 11000) {

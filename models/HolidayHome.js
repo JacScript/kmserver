@@ -1,102 +1,75 @@
 const { model, Schema } = require("mongoose");
 
-// Define the schema for the Apartment model
+// Define the schema for the Holiday Home landing page.
+// This holds the page's own content (hero carousel + listings-section
+// copy) and a curated, ordered list of which apartments to display —
+// linked by reference to the Apartment collection, not duplicated here.
 const schema = new Schema({
-    // Used to build the apartment's own URL (/apartments/:slug) and to look
-    // it up on the detail page — required by the frontend's routing.
-    slug: {
-        type: String,
-        required: [true, 'Slug is required.'],
-        trim: true,
-        lowercase: true,
-        unique: true,
-        minlength: [2, 'Slug must be at least 2 characters long.']
-    },
-    type: {
-        type: String,
-        required: [true, 'Type is required.'], // Added custom error message
-        trim: true, // Trim whitespace from the beginning and end of the string
-        minlength: [2, 'Type must be at least 2 characters long.'] // Example validation
-    },
-    images : [
-        {type: String,
-     required: [true, 'Image URL is required.']
-     }
-    ],
-    price : {
-        type: Number,
-        required: [true, 'Price is required.'], // Added custom error message
-        min: [0, 'Price must be a positive number.'] // Example validation
-    },
-    title: 
-       { type: String,
-        required: [true, 'Title is required.'], // Added custom error message
-        trim: true, // Trim whitespace from the beginning and end of the string
-        minlength: [2, 'Title must be at least 2 characters long.'] // Example validation
-},
-    subtitle: {
-        type: String,
-        required: [true, 'Subtitle is required.'], // Added custom error message
-        trim: true, // Trim whitespace from the beginning and end of the string
-        minlength: [2, 'Subtitle must be at least 2 characters long.'] // Example validation
-    },
-    location: {
-        type: String,
-        required: [true, 'Location is required.'], // Added custom error message
-        trim: true, // Trim whitespace from the beginning and end of the string
-        minlength: [2, 'Location must be at least 2 characters long.'] // Example validation
-    },
-    guests: {
-        type: Number,
-        required: [true, 'Guests is required.'], // Added custom error message
-        min: [1, 'Guest must be a positive number.'] // Example validation
-    },
-    features: [
-        {
+    heroSection: {
+        eyebrow: {
             type: String,
-            required: [true, 'Feature is required.'], // Added custom error message
-            trim: true, // Trim whitespace from the beginning and end of the string
-            minlength: [2, 'Feature must be at least 2 characters long.'] // Example validation
+            trim: true,
+            default: "Entire villa · Studio · Private Room"
+        },
+        title: {
+            type: String,
+            trim: true,
+            required: [true, 'Hero title is required.'],
+            default: "Bahari Breeze Villa Chez Kai"
+        },
+        subheading: {
+            type: String,
+            trim: true,
+            default: "Sun-bleached wood and stone walls open onto a private pool tucked behind the palms — five rooms, one unmistakable view of the coast."
+        },
+        images: {
+            type: [
+                {
+                    url: { type: String, required: [true, 'Hero image URL is required.'] },
+                    alt: { type: String, trim: true },
+                    label: { type: String, trim: true }
+                }
+            ],
+            validate: {
+                validator: (arr) => Array.isArray(arr) && arr.length > 0,
+                message: 'At least one hero image is required.'
+            }
         }
-    ],
-    // rating: {
-    //     type: Number,
-    //     required: [true, 'Rating is required.'], // Added custom error message
-    //     min: [0, 'Rating must be a positive number.'], // Example validation
-    //     max: [5, 'Rating cannot exceed 5.'] // Example validation}
-    // },
-
-    // Renamed from `available` to `availability` to match what the
-    // frontend (ApartmentCard / ApartmentDetailPage) actually reads.
-    availability: {
-        type: Boolean,
-        default: true // Default to true or false as per your business logic
     },
 
-    // Human-readable date shown when availability is false, e.g.
-    // "September 2025" — drives the "Available starting from..." line
-    // on the card and the announcement banner on the detail page.
-    availableFrom: {
-        type: String,
-        trim: true
-    },
-
-    description: {
-        type: String,
-        required: [true, 'Description is required.'], // Added custom error message
-        trim: true, // Trim whitespace from the beginning and end of the string
-        //minlength: [10, 'Description must be at least 10 characters long.'] // Example validation
+    listingsSection: {
+        badge: {
+            type: String,
+            trim: true,
+            default: "Holiday Home"
+        },
+        heading: {
+            type: String,
+            trim: true,
+            default: "Find your next stay in Dar es Salaam."
+        },
+        subheading: {
+            type: String,
+            trim: true,
+            default: "Hand-picked apartments, fully furnished and ready whenever you are."
+        },
+        // Curated, ordered list of apartments shown on this page.
+        // Linked by ObjectId reference — populate() this field to get
+        // the full Apartment documents back.
+        apartments: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Apartment'
+            }
+        ]
     }
 }, {
-    timestamps: true, // Automatically includes createdAt and updatedAt 
+    timestamps: true,
 });
 
-// Optional: Improve performance by indexing the timestamp fields
-schema.index({ createdAt: -1 }, { background: true }); // For sorting by most recent
-schema.index({ updatedAt: -1 }, { background: true }); // For detecting recent updates
+schema.index({ createdAt: -1 }, { background: true });
+schema.index({ updatedAt: -1 }, { background: true });
 
-// Create and export the HolidayHomePage model
 const HolidayHomePage = model('HolidayHomePage', schema);
 
-// Export the HolidayHomePage model for use in other parts of the application
 module.exports = HolidayHomePage;
